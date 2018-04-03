@@ -1,0 +1,64 @@
+.Dd February 6, 2018
+
+.Dt KIKI 3
+
+.Os GNU/Linux
+
+.Sh NOM
+.Nm kiki_read_buffer
+.Nd lis le contenu d'un buffer et copie son contenu en espace utilisateur
+
+.Sh SYNOPSIS
+.Fd #include <kiki_api.h>
+.Ft ssize_t
+.Fo kiki_read_buffer
+.Fa "kiki_buffer_handle_t *buffer"
+.Fa "char *data"
+.Fa "size_t length"
+.Fc
+
+.Sh DESCRIPTION
+La fonction
+.Fn kiki_read_buffer
+est en charge de lire le contenu (en entier ou partiellement) d'un buffer, celui correspondant à sa représentation pointée en espace utilisateur par
+.Fa kiki_buffer_handle_t *buffer ,
+dans une sortie de données arbitraire
+.Fa data
+de longueur
+.Fa length
+en octets.
+Ce paramètre de sorti data peut ou ne pas être capable de contenir tout le contenu du buffer. 
+Donc, l'implémentation doit être capable de gérer le contenu intermédiaire,
+car l'interface noyau ne permet pas de lire un buffer partiellement, seulement dans son entièreté.
+
+
+.Sh VALEURS DE RETOUR
+En cas de succès, le nombre d'octets lus est retourné.
+
+Si la longueur passée en argument est plus grande que la vrai taille du buffer, -2 est retourné.
+
+Autrement, la fonction ne devrait échouer en aucune circonstance, même si des appels vers l'interface noyau sous-jacente pourraient.
+
+
+.Va errno
+.Va n'est pas
+modifié.
+
+
+.Sh ERREURS
+.Fn kiki_read_buffer
+ne devrait échouer que si la longueur
+.Fa length
+est trop grande.
+Autrement, la fonction ne devrait échouer en aucune circonstance, même si des appels vers l'interface noyau sous-jacente pourraient.
+
+
+.Sh VOIR AUSSI
+.Xr kiki_write_buffer 3
+
+
+.Sh HISTOIRE
+Une fonction
+.Fn kiki_read_buffer
+ arriva en 2018,
+pour la compétition de Système d'Exploitation des CS Games.

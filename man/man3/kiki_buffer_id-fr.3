@@ -1,0 +1,50 @@
+.Dd February 6, 2018
+
+.Dt KIKI 3
+
+.Os GNU/Linux
+
+.Sh NOM
+.Nm kiki_buffer_id
+.Nd accès à l'id du buffer sur la devise
+
+.Sh SYNOPSIS
+.Fd #include <kiki_api.h>
+.Ft unsigned long
+.Fo kiki_buffer_id
+.Fa "kiki_buffer_handle_t *buffer"
+.Fc
+
+.Sh DESCRIPTION
+La fonction
+.Fn kiki_buffer_id
+est en charge de retourner l'id du buffer, représenté en espace utilisateur par la structure
+.Fa kiki_buffer_handle_t *buffer
+pointée.
+
+
+.Sh VALEURS DE RETOUR
+En cas de succès, la valeur de l'id est retournée.
+
+La fonction ne devrait échouer en aucune circonstance, même si des appels vers l'interface noyau sous-jacente pourraient.
+
+
+.Va errno
+.Va n'est pas modifié
+
+
+.Sh ERREURS
+.Fn kiki_buffer_id
+ne devrait échouer en aucune circonstance, même si des appels vers l'interface noyau sous-jacente pourraient.
+
+
+.Sh VOIR AUSSI
+.Xr kiki_list_buffers 3 ,
+.Xr kiki_count_buffers 3
+
+
+.Sh HISTOIRE
+Une fonction
+.Fn kiki_buffer_id
+ arriva en 2018,
+pour la compétition de Système d'Exploitation des CS Games.

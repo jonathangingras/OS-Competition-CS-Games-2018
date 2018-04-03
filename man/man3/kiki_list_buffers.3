@@ -1,0 +1,75 @@
+.Dd February 6, 2018
+
+.Dt KIKI 3
+
+.Os GNU/Linux
+
+.Sh NAME
+.Nm kiki_list_buffers
+.Nd lists all the buffers contained in the kiki device
+
+.Sh SYNOPSIS
+.Fd #include <kiki_api.h>
+.Ft int
+.Fo kiki_list_buffers
+.Fa "kiki_handle_t *dev"
+.Fa "kiki_buffer_handle_t ***buffers"
+.Fc
+
+.Sh DESCRIPTION
+The
+.Fn kiki_list_buffers
+function is in charge of listing each existing buffer on the kiki device. It does so by allocating buffer handles on the user space hand represented by the
+.Va kiki_buffer_handle_t
+type. This type being left implementation-defined.
+
+The
+.Fn kiki_list_buffers
+function is responsible for the allocation of all memory used for
+.Va kiki_buffer_handle_t 
+structures pointed by its result.
+
+The function uses the triple pointer semantic for its output argument as it does not require the underlying allocation to align the
+.Va kiki_buffer_handle_t
+structures themselves in memory, only their pointers as an array. This array must then be stored in the address passed in the
+.Fa buffers
+argument.
+
+If no buffer is present in the device:
+.Fa *buffers
+is set to
+.Va NULL .
+
+
+.Sh RETURN VALUES
+In case of success, a value of 0 is returned.
+
+If an error has occurred,
+
+-1 is returned if allocation failed
+
+In any other circumstance, the function should not fail.
+
+
+.Va errno
+is
+.Va not
+set accordingly.
+
+
+.Sh ERRORS
+.Fn kiki_list_buffers
+should not fail in any circumstance, even if an underlying kernel interface call may.
+
+
+.Sh SEE ALSO
+.Xr kiki_new_buffer 3 ,
+.Xr kiki_device_get_status 3,
+.Xr kiki_count_buffers 3,
+.Xr kiki_buffer_list_free 3
+
+.Sh HISTORY
+An
+.Fn kiki_list_buffers
+function first appeared in 2018,
+for the CS Games Operating Systems competition.

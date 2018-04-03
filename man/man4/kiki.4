@@ -1,0 +1,238 @@
+.Dd February 6, 2018
+
+.Dt KIKI 4
+
+.Os GNU/Linux
+
+.Sh NAME
+.Nm /dev/kiki
+.Nd The kiki buffer managing device
+
+.Sh SYNOPSIS
+.Fd #include <kiki.h>
+
+struct kiki_status;
+
+struct kiki_buffer_request;
+
+struct kiki_buffer_fill_request;
+
+struct kiki_buffer_info;
+
+
+.Sh DESCRIPTION
+The kiki device is a buffer handling device that can be manipulated using its IOCTL interface.
+
+In order to function properly, it should be opened in read and write mode.
+
+A list of the available ioctls of its interface and their descriptions is available in the IOCTLs section.
+
+
+.Sh IOCTLs
+.Bl -tag -width Er
+.It Bq KIKIIO_GETSTATUS
+  Returns the current status of the device,
+  the status is more like an error code
+  The status does influence the ability to call certain ioctls
+
+.Va  never fails
+
+.It Bq KIKIIO_REQBUF
+  Requests the creation of a buffer in the device
+  The user should provide a pointer to a "struct kiki_buffer_request" in user space
+  memory containing appropriate information.
+
+.Va  may fail at any time
+
+.It Bq KIKIIO_LISTBUF
+  Lists buffers ids currently existing in device
+  The user should provide a pointer (array) of unsigned long in user space
+  memory in order for the ioctl to fill it. The given array should be large enough
+  to contain all the ids.
+
+.Va  may fail at any time (but not during the filling)
+
+.It Bq KIKIIO_COUNTBUF
+  Counts the number of existing buffers on the device
+  User must provide an unsigned long pointer to user space memory
+  in order to write the result in it
+
+.Va  may fail at any time
+
+.It Bq KIKIIO_SELBUF
+  Changes the current buffer selection to the id provided
+  The user should provide an unsigned long corresponding to the desired buffer's id
+  This buffer should already exist in device
+  On success, this ioctl sets status to KIKIST_BUFSELECTED
+  It must be called every time a subsequent call needing KIKIST_BUFSELECTED status
+
+.Va  may fail at any time
+
+.It Bq KIKIIO_FILLBUF
+  Fills the currently selected buffer with user provided data
+  The user should provide a pointer to a "struct kiki_buffer_fill_request" in
+  user space memory containing appropriate information
+
+  Device should be in Listening State in order to call this ioctl
+
+.Va  may fail at any time
+
+.It Bq KIKIIO_INSPBUF
+  Inspects the currently selected buffer by giving information on it
+  The user should provide a pointer to a "struct kiki_buffer_info" in
+  user space memory in order for the ioctl to fill it
+
+.Va  may fail at any time
+
+.It Bq KIKIIO_DUMPBUF
+  Dumps the currently selected buffer to user space memory
+  The user should provide a pointer to user space memory in order
+  to dump buffer in it. The provided memory should be large enough to
+  contain the buffer entirely.
+
+  Device
+.Va should
+  be put in Answering State to call this ioctl
+
+.Va  may fail at any moment
+
+.It Bq KIKIIO_CLRBUFS
+  Clears all the existing buffers on the device
+
+.Va  may fail at any time
+
+.It Bq KIKIIO_WAITPRCWORK
+  Gives time to device to finish its underlying tasks between other calls
+  The user may call it if needed to maintain the device stability
+
+.Va  never fails
+
+.It Bq KIKIIO_IOINFO
+  Provides the currently selected buffer's id
+  The user should provide a pointer to an unsigned long in order for the ioctl to fill it
+  with the currently selected buffer's id
+
+.Va  may fail at any time
+
+.It Bq KIKIIO_GETSTATE
+  Returns the current device state LIS, ANS or NIL
+  The user should pass a pointer to a integer in user space memory
+  in order for the ioctl to write it
+
+.Va  never fails
+
+.It Bq KIKIIO_SETSTATELIS
+  Sets the current device state to LIS
+  The user should pass no argument
+
+.Va  may fail at any time
+
+.It Bq KIKIIO_SETSTATEANS
+  Sets the current device state to ANS
+  The user should pass no argument
+
+.Va  may fail at any time
+
+.It Bq KIKIIO_DO_NOT_CALL
+  May not be called in order to maintain the system function properly
+
+.It Bq KIKIIO_RST
+  Resets the device entire internal state
+
+.Va  never fails
+
+.El
+
+
+.Sh IOCTLs RETURN VALUES
+In case of success, a value of 0 is returned.
+
+Otherwise, a value found in the DEVICE STATE section is returned.
+
+.Va errno
+is
+.Va not
+set accordingly.
+
+These behaviours are
+.Va not
+POSIX-ly correct: a POSIX compliant ioctl interface should return -1 in case of an error, and a zero or positive value in case of success, this is not the case for this interface. Refer to the beginning of the current section for actual behaviour.
+
+
+.Sh DEVICE STATUS DESCRIPTION
+The kiki device maintains an internal status corresponding to either an IDLE status (KIKIST_IDLE), a buffer-selected status (KIKIST_BUFSELECTED) or an error status from a previous ioctl fail (KIKIERR_FAILED_...).
+
+The device status can be informative for a developer, but does not modify the device's behavior, except for the buffer-selected status (KIKIST_BUFSELECTED) which must be effective before any read or write operation on the device.
+
+
+.Sh DEVICE STATUS (NORMAL)
+.Bl -tag -width Er
+.\" ==========
+.It Bq Er KIKIST_IDLE
+    waiting normal status (IDLE)
+.\" ==========
+.It Bq Er KIKIST_BUFSELECTED
+    a buffer is selected and can be used to read/write
+.El
+
+
+.Sh DEVICE STATUS (ERROR)
+.Bl -tag -width Er
+.\" ==========
+.It Bq Er KIKIERR_FAILED_REQBUF   
+    failed requiring a buffer instantiation
+.\" ==========
+.It Bq Er KIKIERR_FAILED_LISTBUF
+    failed listing buffer ids
+.\" ==========
+.It Bq Er KIKIERR_FAILED_COUNTBUF
+    failed counting buffers
+.\" ==========
+.It Bq Er KIKIERR_FAILED_CLRBUF
+    failed clearing buffers' content
+.\" ==========
+.It Bq Er KIKIERR_FAILED_SELBUF
+    failed selecting a buffer
+.\" ==========
+.It Bq Er KIKIERR_FAILED_FILLBUF
+    failed filling a buffer with data
+.\" ==========
+.It Bq Er KIKIERR_FAILED_DUMPBUF
+    failed dumping a buffer's data
+.\" ==========
+.It Bq Er KIKIERR_INSPBUF
+    failed inspecting a buffer's properties
+.\" ==========
+.It Bq Er KIKIERR_IOINFO
+    failed getting current selected buffer's id
+.\" ==========
+.It Bq Er KIKIERR_SETSTATE
+    failed setting listening/answering state
+.El
+
+
+.Sh DEVICE READ/WRITE STATE
+Pay attention here to terminology:
+status != state.
+
+The kiki device maintains an internal read/write state corresponding to 
+"answer state" (the device may be read) and "listening state" (the device may be written).
+
+This state should be set appropriately using ioctls before attempting any read/write operation on the device.
+
+
+.Bl -tag -width Er
+.\" ==========
+.It Bq Er KIKI_STATELIS
+listening state
+.\" ==========
+.It Bq Er KIKI_STATEANS
+answering state
+.El
+
+
+.Sh HISTORY
+The
+.Va kiki
+device first appeared in 2018,
+for the CS Games Operating Systems competition.

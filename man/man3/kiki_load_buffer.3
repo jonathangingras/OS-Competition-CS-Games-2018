@@ -1,0 +1,74 @@
+.Dd February 6, 2018
+
+.Dt KIKI 3
+
+.Os GNU/Linux
+
+.Sh NAME
+.Nm kiki_load_buffer
+.Nd load a device buffer from a file
+
+.Sh SYNOPSIS
+.Fd #include <kiki_api.h>
+.Ft ssize_t
+.Fo kiki_load_buffer
+.Fa "kiki_handle_t *dev"
+.Fa "kiki_buffer_handle_t **out"
+.Fa "FILE *input"
+.Fc
+
+.Sh DESCRIPTION
+The
+.Fn kiki_load_buffer
+function is in charge of loading a device buffer entirely in the device from a file.
+The format in which the buffer is loaded in the file is left implementation-defined, as long as it is the same one used in
+.Fn kiki_save_buffer
+function, so save/load operations are coherent.
+
+The
+.Fn kiki_load_buffer
+is responsible for allocation and proper initialization of a
+.Fa "kiki_buffer_handle_t"
+structure representing the newly filled device buffer in user space.
+This structure's address should be written in the
+.Fn out
+argument.
+
+
+.Sh RETURN VALUES
+In case of success, 0 is returned.
+
+If dynamic memory allocation fails, a value of -1 is returned.
+
+If the
+.Fa input
+parameter is invalid, a less-than-zero value should be returned.
+
+Otherwise, the function should not fail in any other circumstance, even if the underlying kernel interface call(s) could.
+
+
+.Va errno
+is
+.Va not
+set accordingly.
+
+
+.Sh ERRORS
+.Fn kiki_load_buffer
+should only fail if the passed argument
+.Fa input
+is not a valid opened FILE* or if dynamic memory allocation fails.
+
+In any other circumstance, the function should not fail, even if an underlying kernel interface call may.
+
+
+.Sh SEE ALSO
+.Xr kiki_write_buffer 3 ,
+.Xr kiki_save_buffer 3
+
+
+.Sh HISTORY
+An
+.Fn kiki_load_buffer
+function first appeared in 2018,
+for the CS Games Operating Systems competition.

@@ -1,0 +1,60 @@
+.Dd February 6, 2018
+
+.Dt KIKI 3
+
+.Os GNU/Linux
+
+.Sh NAME
+.Nm kiki_device_deinit
+.Nd de-initialize the kiki device connection
+
+.Sh SYNOPSIS
+.Fd #include <kiki_api.h>
+.Ft void
+.Fo kiki_device_deinit
+.Fa "kiki_handle_t *dev"
+.Fc
+
+.Sh DESCRIPTION
+The
+.Fn kiki_device_deinit
+function is in charge of closing the kiki device
+and deallocating memory
+that both occurred in a previous
+.Fn kiki_device_init
+call.
+
+The
+.Fn kiki_device_init
+function is responsible for the deallocation of the
+.Fa dev
+\'s pointed object of type
+.Fa kiki_handle_t.
+
+The
+.Fn kiki_device_deinit
+may not be called on an non-already-initialized
+.Fa dev
+argument using
+.Fn kiki_device_init
+\, otherwise, its behaviour is undefined.
+
+
+.Sh RETURN VALUES
+The function has no return value.
+
+
+.Sh ERRORS
+This function has no error associated with it.
+
+
+.Sh SEE ALSO
+.Xr kiki_device_init 3 ,
+.Xr kiki_device_fileno 3
+
+
+.Sh HISTORY
+An
+.Fn kiki_device_deinit
+function first appeared in 2018,
+for the CS Games Operating Systems competition.

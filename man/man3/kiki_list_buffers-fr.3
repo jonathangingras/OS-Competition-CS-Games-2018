@@ -1,0 +1,76 @@
+.Dd February 6, 2018
+
+.Dt KIKI 3
+
+.Os GNU/Linux
+
+.Sh NOM
+.Nm kiki_list_buffers
+.Nd liste tous les buffers contenus dans la devise
+
+.Sh SYNOPSIS
+.Fd #include <kiki_api.h>
+.Ft int
+.Fo kiki_list_buffers
+.Fa "kiki_handle_t *dev"
+.Fa "kiki_buffer_handle_t ***buffers"
+.Fc
+
+.Sh DESCRIPTION
+La fonction
+.Fn kiki_list_buffers
+est en charge de lister tous les buffers existants dans la devise kiki.
+Elle le fait en allouant des hanldles de buffer représentés dans l'espace utilisateur par le type
+.Va kiki_buffer_handle_t
+.
+La définition de la structure est laissée libre à l'implémenteur.
+
+La fonction
+.Fn kiki_list_buffers
+est responsable pour l'allocation de toute mémoire utilisée par les structures
+.Va kiki_buffer_handle_t 
+et la liste de leurs pointeurs.
+
+La fonction utilise la sémantique de triples pointeurs pour son argument de sorti, car elle ne nécessite pas d'allouer les structures
+.Va kiki_buffer_handle_t
+de façon alignée en mémoire. Seulement leurs pointeurs doivent l'être dans
+.Fa buffers
+en résultat.
+
+Si aucun buffer n'est présent:
+.Fa *buffers
+est mis à
+.Va NULL.
+
+
+.Sh VALEURS DE RETOUR
+En cas de succès, 0 est retourné.
+
+En cas d'erreur,
+
+-1 est retourné si l'allocation échoue.
+
+Autrement, la fonction ne devrait jamais échouer.
+
+
+.Va errno
+.Va n'est pas
+modifié.
+
+
+.Sh ERREURS
+.Fn kiki_list_buffers
+La fonction ne devrait échouer en aucune circonstance, même si des appels vers l'interface noyau sous-jacente pourraient.
+
+
+.Sh VOIR AUSSI
+.Xr kiki_new_buffer 3 ,
+.Xr kiki_device_get_status 3,
+.Xr kiki_count_buffers 3,
+.Xr kiki_buffer_list_free 3
+
+.Sh HISTOIRE
+Une fonction
+.Fn kiki_list_buffers
+ arriva en 2018,
+pour la compétition de Système d'Exploitation des CS Games.

@@ -1,0 +1,72 @@
+.Dd February 6, 2018
+
+.Dt KIKI 3
+
+.Os GNU/Linux
+
+.Sh NAME
+.Nm kiki_device_init
+.Nd initialize the kiki device connection
+
+.Sh SYNOPSIS
+.Fd #include <kiki_api.h>
+.Ft int
+.Fo kiki_device_init
+.Fa "kiki_handle_t **dev"
+.Fc
+
+.Sh DESCRIPTION
+The
+.Fn kiki_device_init
+function is in charge of opening the kiki device
+for its further manipulation with the
+.Fa dev
+arguments using other
+.Dq kiki_
+functions.
+
+The
+.Fn kiki_device_init
+function is responsible for the allocation of the
+.Fa dev
+\'s pointed object of type
+.Fa kiki_handle_t.
+
+The
+.Fa kiki_handle_t
+type is implementation-defined.
+
+
+.Sh RETURN VALUES
+In case of success, a value of 0 is returned.
+
+If an error has occurred, a value of -1 is returned.
+
+.Va errno
+is
+.Va not
+set accordingly.
+
+
+.Sh ERRORS
+.Fn kiki_device_init
+will fail if:
+.Bl -tag -width Er
+.\" ==========
+.It Bq Er ENOMEM
+dynamic memory allocation fails.
+.\" ==========
+.It Bq Er ENOENT
+/dev/kiki does not exist.
+.El
+
+
+.Sh SEE ALSO
+.Xr kiki_device_deinit 3 ,
+.Xr kiki_device_fileno 3
+
+.Sh HISTORY
+An
+.Fn kiki_device_init
+function first appeared in 2018,
+for the CS Games Operating Systems competition.

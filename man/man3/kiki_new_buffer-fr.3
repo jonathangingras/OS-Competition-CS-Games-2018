@@ -1,0 +1,71 @@
+.Dd February 6, 2018
+
+.Dt KIKI 3
+
+.Os GNU/Linux
+
+.Sh NOM
+.Nm kiki_new_buffer
+.Nd crée un nouveau buffer sur la devise kiki
+
+.Sh SYNOPSIS
+.Fd #include <kiki_api.h>
+.Ft int
+.Fo kiki_new_buffer
+.Fa "kiki_handle_t *dev"
+.Fa "size_t size"
+.Fa "kiki_buffer_handle_t **buffer"
+.Fc
+
+.Sh DESCRIPTION
+La fonction
+.Fn kiki_new_buffer
+est en charge de créer un nouveau buffer sur la devise avec la taille en octets placée en requête
+.Fa size .
+Du côté espace utilisateur, une structure de type
+.Va kiki_buffer_handle_t
+(la définition de ce type étant laissée à l'implémenteur)
+devrait être allouée et son adresse écrite dans
+.Fa buffer
+.
+
+La fonction
+.Fn kiki_new_buffer
+est responsable de l'allocation de toute mémoire utilisée par la structure
+.Va kiki_buffer_handle_t 
+pointée par l'argument de retour.
+
+La fonction
+.Fn kiki_new_buffer
+est responsable de
+.Va choisir intélligemment
+un id approprié pour le buffer dans sa requête vers l'interface noyau,
+ce paramètre n'étant pas passé en argument.
+
+
+.Sh VALEURS DE RETOUR
+En cas de succès, 0 est retourné.
+
+La fonction ne devrait échouer en aucune circonstance, même si des appels vers l'interface noyau sous-jacente pourraient.
+
+
+.Va errno
+.Va n'est pas
+modifié.
+
+
+.Sh ERREURS
+.Fn kiki_new_buffer
+La fonction ne devrait échouer en aucune circonstance, même si des appels vers l'interface noyau sous-jacente pourraient.
+
+
+.Sh VOIR AUSSI
+.Xr kiki_list_buffers 3 ,
+.Xr kiki_count_buffers 3,
+
+
+.Sh HISTOIRE
+Une fonction
+.Fn kiki_new_buffer
+ arriva en 2018,
+pour la compétition de Système d'Exploitation des CS Games.

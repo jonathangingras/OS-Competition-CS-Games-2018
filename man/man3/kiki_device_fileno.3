@@ -1,0 +1,60 @@
+.Dd February 6, 2018
+
+.Dt KIKI 3
+
+.Os GNU/Linux
+
+.Sh NAME
+.Nm kiki_device_fileno
+.Nd gets the underlying file descriptor to kiki device
+
+.Sh SYNOPSIS
+.Fd #include <kiki_api.h>
+.Ft int
+.Fo kiki_device_fileno
+.Fa "kiki_handle_t *dev"
+.Fc
+
+.Sh DESCRIPTION
+The
+.Fn kiki_device_fileno
+function gives access the underlying opened file descriptor associated with the
+.Fa dev
+handle, which was previously obtained by a call to
+.Fn kiki_device_init .
+
+The
+.Fn kiki_device_fileno
+function may not be called on an non-already-initialized
+.Fa dev
+argument using
+.Fn kiki_device_init
+\, otherwise, its behaviour is undefined.
+
+
+.Sh RETURN VALUES
+An opened file descriptor in
+.Va O_RDWR
+mode to the kiki device should be returned.
+
+
+.Va errno
+is
+.Va not
+modified by this function.
+
+
+.Sh ERRORS
+.Fn kiki_device_fileno
+has no specific error associated with it.
+
+
+.Sh SEE ALSO
+.Xr kiki_device_init 3
+
+
+.Sh HISTORY
+An
+.Fn kiki_device_fileno
+function first appeared in 2018,
+for the CS Games Operating Systems competition.

@@ -1,0 +1,240 @@
+.Dd February 6, 2018
+
+.Dt KIKI 4
+
+.Os GNU/Linux
+
+.Sh NOM
+.Nm /dev/kiki
+.Nd La devise kiki de gestion de buffers
+
+.Sh SYNOPSIS
+.Fd #include <kiki.h>
+
+struct kiki_status;
+
+struct kiki_buffer_request;
+
+struct kiki_buffer_fill_request;
+
+struct kiki_buffer_info;
+
+
+.Sh DESCRIPTION
+La devise kiki est une devise de gestion de buffers manipulée par une interface d'IOCTL.
+
+Pour fonctionner correctement, elle devrait être ouverte en mode lecture et écriture.
+
+Une liste des ioctl disponibles dans son interface et les descriptions correspondantes est disponible dans la section IOCTL.
+
+
+.Sh IOCTL
+.Bl -tag -width Er
+.It Bq KIKIIO_GETSTATUS
+  Retourne le statut courrant de la devise,
+  le statut est comme un code d'erreur.
+  Le statut n'influence pas l'habileté d'appeler certains ioctl.
+
+.Va  n'échoue jamais
+
+.It Bq KIKIIO_REQBUF
+  Requête de création de buffer sur la devise.
+  L'utilisateur devrait fournir un pointeur vers une "struct kiki_buffer_request" en espace utilisateur
+  contenant les informations appropriées.
+
+.Va  peut échouer à tout moment
+
+.It Bq KIKIIO_LISTBUF
+  Liste les id des buffers existants sur la devise
+  L'utilisateur devrait fournir un pointeur (tableau) de unsigned long en espace utilisateur
+  pour que l'ioctl le remplisse. Le tableau passé devrait être assez large pour contenir tous les id.
+
+.Va  peut échouer à tout moment (but not during the filling)
+
+.It Bq KIKIIO_COUNTBUF
+  Compte le nombre de buffers existants sur la devise
+  L'utilisateur doit fournir l'adresse d'un unsigned long en espace utilisateur
+  pour qu'il soit écrit.
+
+.Va  peut échouer à tout moment
+
+.It Bq KIKIIO_SELBUF
+  Change la sélection du buffer courant pour celui avec l'id fourni.
+  L'utilisateur devrait fournir un unsigned long correspondant au buffer désiré par son id.
+  Ce buffer doit déjà exister sur la devise.
+  En cas de succès, l'ioctl mets le statut à KIKIST_BUFSELECTED.
+  Cet ioctl doit être appelé à chaque foit que ce statut est nécessaire.
+
+.Va  peut échouer à tout moment
+
+.It Bq KIKIIO_FILLBUF
+  Remplit le buffer sélectionné avec les données fournies par l'utilisateur.
+  L'utilisateur devrait fournit un pointeur vers une "struct kiki_buffer_fill_request" vivant en
+  espace utilisateur contenant les informations appropriées.
+
+  La devise
+.Va devrait
+  être en état d'écoute pour que l'appel fonctionne.
+
+.Va  peut échouer à tout moment
+
+.It Bq KIKIIO_INSPBUF
+  Inspecte le buffer sélectionné en donnant ses informations.
+  L'utilisateur doit fournir un pointeur vers une "struct kiki_buffer_info" vivant en
+  espace utilisateur pour qu'elle soit écrite.
+
+.Va  peut échouer à tout moment
+
+.It Bq KIKIIO_DUMPBUF
+  Décharge le buffer sélectionné en espace utilisateur.
+  L'utilisateur devrait fournir un pointeur vers de la mémoire vivant en
+  espace utilisateur pour que la mémoire du buffer y soir copiée.
+  La mémoire passée devrait être assez large pour contenir tout le buffer.
+
+  La devise
+.Va devrait
+  être en état d'écoute pour que l'appel fonctionne.
+
+.Va  peut échouer à tout moment
+
+.It Bq KIKIIO_CLRBUFS
+  Efface tous les buffers sur la devise et leur contenu.
+
+.Va  peut échouer à tout moment
+
+.It Bq KIKIIO_WAITPRCWORK
+  Donne de temps à la devise pour finir ses tâches entre les autres appels.
+  L'utilisateur peut appeler cet ioctl, s'il en a besoin, pour maintenir la stabilité de la devise.
+
+.Va  n'échoue jamais
+
+.It Bq KIKIIO_IOINFO
+  Fournit l'id du buffer sélectionné.
+  L'utilisateur devrait fournit un pointeur vers un unsigned long vivant en
+  espace utilisateur pour que l'id y soit écrit.
+
+.Va  peut échouer à tout moment
+
+.It Bq KIKIIO_GETSTATE
+  Retourne l'état de la devise LIS, ANS ou NIL.
+  L'utilisateur devrait passer un pointeur vers un int vivant en
+  espace utilisateur pour que l'état y soit écrit.
+
+.Va  n'échoue jamais
+
+.It Bq KIKIIO_SETSTATELIS
+  Définit l'état de la devise à LIS.
+  Aucun argument à fournir.
+
+.Va  peut échouer à tout moment
+
+.It Bq KIKIIO_SETSTATEANS
+  Définit l'état de la devise à ANS.
+  Aucun argument à fournir.
+
+.Va  peut échouer à tout moment
+
+.It Bq KIKIIO_DO_NOT_CALL
+  Ne devrait pas être appellé pour maintenir le fonctionnement du système.
+
+.It Bq KIKIIO_RST
+  Réinitialise complètement la devise.
+
+.Va  n'échoue jamais
+
+.El
+
+
+.Sh IOCTL: VALEURS DE RETOUR
+En cas de succès, 0 est retourné.
+
+Autrement, une valeur en concordance à la section ÉTAT DE LA DEVISE est retournée.
+
+.Va errno
+.Va n'est pas
+modifié.
+
+Ce comportement 
+.Va n'est pas
+correcte selon POSIX: un interface d'ioctl ne devrait retourner que -1 en cas d'échec et 0 ou une valeur positive en cas de succès.
+Ce n'est pas le cas ici.
+Se référer au début de la courante section pour le comportement de la devise.
+
+
+.Sh DESCRIPTION: STATUTS DE LA DEVISE
+La devise maintient un statut interne correspondant à soit un statut IDLE (KIKIST_IDLE), un statut où un buffer est sélectionné (KIKIST_BUFSELECTED) ou un statut d'erreur provenant d'un échec d'ioctl précédent (KIKIERR_FAILED_...).
+
+Le statut de la devise peut être informatif pour le développeur, mais ne modifie pas le comportement de la devise, excepté pour le cas où un buffer est sélectionné (KIKIST_BUFSELECTED) qui doit être effectif au moment où on veut pouvoir lire ou écrire sur la devise.
+
+
+.Sh STATUTS DE LA DEVISE (NORMAL)
+.Bl -tag -width Er
+.\" ==========
+.It Bq Er KIKIST_IDLE
+    attente normale (IDLE)
+.\" ==========
+.It Bq Er KIKIST_BUFSELECTED
+    un buffer est sélectionné et peut être lu/écrit
+.El
+
+
+.Sh STATUTS DE LA DEVISE (ERREURS)
+.Bl -tag -width Er
+.\" ==========
+.It Bq Er KIKIERR_FAILED_REQBUF
+    échec de requête d'un buffer
+.\" ==========
+.It Bq Er KIKIERR_FAILED_LISTBUF
+    échec de listage des ids des buffers
+.\" ==========
+.It Bq Er KIKIERR_FAILED_COUNTBUF
+    échec de comptage des buffers
+.\" ==========
+.It Bq Er KIKIERR_FAILED_CLRBUF
+    échec d'effacement du contenu des buffers
+.\" ==========
+.It Bq Er KIKIERR_FAILED_SELBUF
+    échec de sélection
+.\" ==========
+.It Bq Er KIKIERR_FAILED_FILLBUF
+    échec de remplissage
+.\" ==========
+.It Bq Er KIKIERR_FAILED_DUMPBUF
+    échec de décharge du contenu
+.\" ==========
+.It Bq Er KIKIERR_INSPBUF
+    échec d'inspection des propriétés d'un buffer
+.\" ==========
+.It Bq Er KIKIERR_IOINFO
+    échec d'obtention de l'id du buffer sélectionné
+.\" ==========
+.It Bq Er KIKIERR_SETSTATE
+    échec de changement d'état écoute/réponse
+.El
+
+
+.Sh ÉTAT DE LA DEVISE (LECTURE/ÉCRITURE)
+Faire attention à la terminologie:
+statut != état.
+
+La devise kiki maintient un état interne de lecture/écriture correspondant à
+«état de réponse» (la devise peut être lue) et «état d'écoute» (la devise peut être écrite).
+
+Cet état devrait être sélectionné de façon appropriée avant d'essayer d'écrire ou lire sur la devise.
+
+
+.Bl -tag -width Er
+.\" ==========
+.It Bq Er KIKI_STATELIS
+écoute
+.\" ==========
+.It Bq Er KIKI_STATEANS
+réponse
+.El
+
+
+.Sh HISTOIRE
+La devise
+.Va kiki
+ arriva en 2018,
+pour la compétition de Système d'Exploitation des CS Games.

@@ -1,0 +1,48 @@
+.Dd February 6, 2018
+
+.Dt KIKI 3
+
+.Os GNU/Linux
+
+.Sh NOM
+.Nm kiki_count_buffers
+.Nd compte les buffers contenus dans la devise
+
+.Sh SYNOPSIS
+.Fd #include <kiki_api.h>
+.Ft int
+.Fo kiki_count_buffers
+.Fa "kiki_handle_t *dev"
+.Fa "size_t *amount"
+.Fc
+
+.Sh DESCRIPTION
+La fonction
+.Fn kiki_count_buffers
+retourne le nombre de buffers vivants, en ce moment, dans la devise.
+
+
+.Sh VALEURS DE RETOUR
+En cas de succès, 0 est retourné.
+
+En cas d'échec, -1 est retourné.
+
+.Va errno
+.Va n'est pas
+modifié.
+
+
+.Sh ERREURS
+.Fn kiki_count_buffers
+La fonction ne devrait échouer en aucune circonstance, même si des appels vers l'interface noyau sous-jacente pourraient.
+
+
+.Sh VOIR AUSSI
+.Xr kiki_new_buffer 3 ,
+.Xr kiki_list_buffers 3
+
+.Sh HISTOIRE
+Une fonction
+.Fn kiki_count_buffers
+ arriva en 2018,
+pour la compétition de Système d'Exploitation des CS Games.

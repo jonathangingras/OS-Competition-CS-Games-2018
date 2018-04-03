@@ -1,0 +1,63 @@
+.Dd February 6, 2018
+
+.Dt KIKI 3
+
+.Os GNU/Linux
+
+.Sh NOM
+.Nm kiki_save_buffer
+.Nd sauvegarde un buffer dans un fichier
+
+.Sh SYNOPSIS
+.Fd #include <kiki_api.h>
+.Ft ssize_t
+.Fo kiki_save_buffer
+.Fa "kiki_buffer_handle_t *buffer"
+.Fa "FILE *output"
+.Fc
+
+.Sh DESCRIPTION
+La fonction
+.Fn kiki_save_buffer
+est en charge de décharger un buffer intégralement dans un fichier.
+Le format n'est pas imposé, en autant que la fonction
+.Fn kiki_load_buffer
+soit capable de le lire de la même façon par la suite.
+
+
+.Sh VALEURS DE RETOUR
+En cas de succès, 0 est retourné.
+
+En cas d'échec d'allocation, -2 est retourné.
+
+Si le paramètre
+.Fa output
+est invalide, une valeur < 0 est retournée.
+
+En aucune autre circonstance la fonction ne devrait échouer, même si des appels vers l'interface noyau sous-jacente pourraient.
+
+
+.Va errno
+.Va n'est pas
+modifié.
+
+
+.Sh ERREURS
+.Fn kiki_save_buffer
+devrait échouer uniquement si le paramètre
+.Fa output
+n'est pas un FILE* valide ou si l'allocation dynamique échoue.
+
+En aucune autre circonstance la fonction ne devrait échouer, même si des appels vers l'interface noyau sous-jacente pourraient.
+
+
+.Sh VOIR AUSSI
+.Xr kiki_read_buffer 3 ,
+.Xr kiki_load_buffer 3
+
+
+.Sh HISTOIRE
+Une fonction
+.Fn kiki_save_buffer
+ arriva en 2018,
+pour la compétition de Système d'Exploitation des CS Games.

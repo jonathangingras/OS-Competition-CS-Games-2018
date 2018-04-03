@@ -1,0 +1,70 @@
+.Dd February 6, 2018
+
+.Dt KIKI 3
+
+.Os GNU/Linux
+
+.Sh NOM
+.Nm kiki_device_init
+.Nd initialise la devise kiki
+
+.Sh SYNOPSIS
+.Fd #include <kiki_api.h>
+.Ft int
+.Fo kiki_device_init
+.Fa "kiki_handle_t **dev"
+.Fc
+
+.Sh DESCRIPTION
+La fonction
+.Fn kiki_device_init
+est en charge d'ouvrir la devise kiki
+pour ses manipulations ultérieures avec
+.Fa dev
+et les autres fonctions préfixées
+.Dq kiki_
+.
+La fonction
+.Fn kiki_device_init
+est responsable de l'allocation de l'objet pointé par
+.Fa dev
+de type
+.Fa kiki_handle_t.
+Le type
+.Fa kiki_handle_t
+est laissé libre à l'implémenteur.
+
+
+.Sh VALEURS DE RETOUR
+En cas de succès, 0 est retourné.
+
+En cas d'erreur, -1 est retourné.
+
+.Va errno
+.Va n'est pas
+modifié.
+
+
+.Sh ERREURS
+.Fn kiki_device_init
+écouera si:
+.Bl -tag -width Er
+.\" ==========
+.It Bq Er ENOMEM
+allocation dynamique échoue.
+.\" ==========
+.It Bq Er ENOENT
+/dev/kiki n'existe pas.
+.El
+
+
+.Sh VOIR AUSSI
+.Xr kiki_device_deinit 3 ,
+.Xr kiki_device_fileno 3
+
+
+.Sh HISTOIRE
+Une fonction
+.Fn kiki_device_init
+ arriva en 2018,
+pour la compétition de Système d'Exploitation des CS Games.

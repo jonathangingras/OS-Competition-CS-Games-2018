@@ -1,0 +1,59 @@
+.Dd February 6, 2018
+
+.Dt KIKI 3
+
+.Os GNU/Linux
+
+.Sh NOM
+.Nm kiki_device_fileno
+.Nd obtient le descripteur de fichier ouvert de la devise kiki
+
+.Sh SYNOPSIS
+.Fd #include <kiki_api.h>
+.Ft int
+.Fo kiki_device_fileno
+.Fa "kiki_handle_t *dev"
+.Fc
+
+.Sh DESCRIPTION
+La fonction
+.Fn kiki_device_fileno
+donne accès au descripteur de fichier ouvert sur la devise kiki à partir de l'objet pointé par
+.Fa dev
+qui a été obtenu par un appel précédent à la fonction
+.Fn kiki_device_init .
+
+La fonction
+.Fn kiki_device_fileno
+ne doit pas être appellée par un objet
+.Fa dev
+non-initialisé par la fonction
+.Fn kiki_device_init
+\, autrement, le comportement est indéfini.
+
+
+.Sh VALEURS DE RETOUR
+Un descripteur de fichier ouvert en mode
+.Va O_RDWR
+sur la devise kiki devrait être retourné.
+
+
+.Va errno
+.Va n'est pas
+modifié.
+
+
+.Sh ERREURS
+.Fn kiki_device_fileno
+n'a pas d'erreur spécifique associée.
+
+
+.Sh VOIR AUSSI
+.Xr kiki_device_init 3
+
+
+.Sh HISTOIRE
+Une fonction
+.Fn kiki_device_fileno
+ arriva en 2018,
+pour la compétition de Système d'Exploitation des CS Games.

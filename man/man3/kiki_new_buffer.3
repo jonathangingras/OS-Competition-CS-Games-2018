@@ -1,0 +1,72 @@
+.Dd February 6, 2018
+
+.Dt KIKI 3
+
+.Os GNU/Linux
+
+.Sh NAME
+.Nm kiki_new_buffer
+.Nd create a new buffer on the kiki device
+
+.Sh SYNOPSIS
+.Fd #include <kiki_api.h>
+.Ft int
+.Fo kiki_new_buffer
+.Fa "kiki_handle_t *dev"
+.Fa "size_t size"
+.Fa "kiki_buffer_handle_t **buffer"
+.Fc
+
+.Sh DESCRIPTION
+The
+.Fn kiki_new_buffer
+function is in charge of creating a new buffer on the device with the requested size of
+.Fa size
+bytes. On the user space hand, a structure of type
+.Va kiki_buffer_handle_t
+(this type being left implementation-define)
+should be allocated and its address written in
+.Fa buffer
+.
+
+The
+.Fn kiki_new_buffer
+function is responsible for the allocation of all memory used for
+.Va kiki_buffer_handle_t 
+structures pointed by its result.
+
+The
+.Fn kiki_new_buffer
+function is responsible to
+.Va choose wisely
+an appropriate id for the buffer request underlying call.
+This parameter is not passed by argument.
+
+
+.Sh RETURN VALUES
+In case of success, a value of 0 is returned.
+
+The function should not fail in any circumstance, even if the underlying kernel interface call(s) could.
+
+
+.Va errno
+is
+.Va not
+set accordingly.
+
+
+.Sh ERRORS
+.Fn kiki_new_buffer
+should not fail in any circumstance, even if an underlying kernel interface call may.
+
+
+.Sh SEE ALSO
+.Xr kiki_list_buffers 3 ,
+.Xr kiki_count_buffers 3,
+
+
+.Sh HISTORY
+An
+.Fn kiki_new_buffer
+function first appeared in 2018,
+for the CS Games Operating Systems competition.

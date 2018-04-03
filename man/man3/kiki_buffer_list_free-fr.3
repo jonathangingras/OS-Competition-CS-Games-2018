@@ -1,0 +1,59 @@
+.Dd February 6, 2018
+
+.Dt KIKI 3
+
+.Os GNU/Linux
+
+.Sh NOM
+.Nm kiki_buffer_list_free
+.Nd libère la mémoire des buffers listés par
+.Fn kiki_list_buffers
+
+.Sh SYNOPSIS
+.Fd #include <kiki_api.h>
+.Ft int
+.Fo kiki_buffer_list_free
+.Fa "kiki_buffer_handle_t **buffers"
+.Fc
+
+.Sh DESCRIPTION
+La fonction
+.Fn kiki_buffer_list_free
+est en charge de désallouer la mémoire allouée par
+.Fn kiki_list_buffers.
+Cette mémoire inclut la mémoire de la structure
+.Va kiki_buffer_handle_t
+et n'importe quelle supplémentaire utilisée au moment du listage.
+
+
+La fonction
+.Fn kiki_buffer_list_free
+ne peut pas être appellée sur une structure
+.Va kiki_buffer_handle_t
+qui n'a pas été allouée par
+.Fn kiki_list_buffers
+, sinon, le comportement est indéfini.
+
+
+.Sh VALEURS DE RETOUR
+Aucune.
+
+
+.Va errno
+.Va n'est pas
+modifié.
+
+
+.Sh ERREURS
+.Fn kiki_buffer_list_free
+ne devrait jamais échouer.
+
+
+.Sh VOIR AUSSI
+.Xr kiki_list_buffers 3
+
+.Sh HISTOIRE
+Une fonction
+.Fn kiki_buffer_list_free
+ arriva en 2018,
+pour la compétition de Système d'Exploitation des CS Games.

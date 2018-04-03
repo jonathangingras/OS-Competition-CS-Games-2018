@@ -1,0 +1,59 @@
+.Dd February 6, 2018
+
+.Dt KIKI 3
+
+.Os GNU/Linux
+
+.Sh NOM
+.Nm kiki_buffer_inspect
+.Nd accède à la taille et à l'id du buffer sur la devise
+
+.Sh SYNOPSIS
+.Fd #include <kiki_api.h>
+.Ft int
+.Fo kiki_buffer_inspect
+.Fa "kiki_buffer_handle_t *buffer"
+.Fa "struct kiki_buffer_info *info"
+.Fc
+
+.Sh DESCRIPTION
+La fonction
+.Fn kiki_buffer_inspect
+est en charge d'inspecter le buffer sur la devise correspondant à sa représentation en espace utilisateur par le pointeur de structure
+.Fa kiki_buffer_handle_t *buffer
+.
+L'inspection est représentée par le type
+.Fa struct kiki_buffer_info
+à la fois dans l'espace noyau et utilisateur.
+L'argument
+.Fa info
+devrait être écris comme paramètre de sortie.
+
+
+.Sh VALEURS DE RETOUR
+En cas de succès, 0 est retourné.
+
+La fonction ne devrait échouer en aucune circonstance, même si des appels vers l'interface noyau sous-jacente pourraient.
+
+
+.Va errno
+.Va n'est pas
+modifié.
+
+
+.Sh ERREURS
+.Fn kiki_buffer_inspect
+La fonction ne devrait échouer en aucune circonstance, même si des appels vers l'interface noyau sous-jacente pourraient.
+
+
+.Sh VOIR AUSSI
+.Xr kiki_list_buffers 3 ,
+.Xr kiki_buffer_id    3 ,
+.Xr kiki_buffer_size  3
+
+
+.Sh HISTOIRE
+Une fonction
+.Fn kiki_buffer_inspect
+ arriva en 2018,
+pour la compétition de Système d'Exploitation des CS Games.

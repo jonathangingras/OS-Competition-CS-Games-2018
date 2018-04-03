@@ -1,0 +1,62 @@
+.Dd February 6, 2018
+
+.Dt KIKI 3
+
+.Os GNU/Linux
+
+.Sh NAME
+.Nm kiki_write_buffer
+.Nd write a buffer on device
+
+.Sh SYNOPSIS
+.Fd #include <kiki_api.h>
+.Ft ssize_t
+.Fo kiki_write_buffer
+.Fa "kiki_buffer_handle_t *buffer"
+.Fa "const char *data"
+.Fa "size_t length"
+.Fc
+
+.Sh DESCRIPTION
+The
+.Fn kiki_write_buffer
+function is in charge of filling a device buffer, corresponding to a buffer represented in user space by a
+.Fa kiki_buffer_handle_t *buffer
+structure pointer, with arbitrary data pointed by
+.Fa data
+of a length
+.Fa length
+in bytes.
+
+
+.Sh RETURN VALUES
+In case of success, the amount of bytes written is returned.
+
+If the length passed by argument is greater than the actual size of the buffer, a value of -2 is returned.
+
+Otherwise, the function should not fail in any other circumstance, even if the underlying kernel interface call(s) could.
+
+
+.Va errno
+is
+.Va not
+set accordingly.
+
+
+.Sh ERRORS
+.Fn kiki_write_buffer
+should only fail if the passed argument
+.Fa length
+is too great.
+In any other circumstance, the function should not fail, even if an underlying kernel interface call may.
+
+
+.Sh SEE ALSO
+.Xr kiki_read_buffer 3
+
+
+.Sh HISTORY
+An
+.Fn kiki_write_buffer
+function first appeared in 2018,
+for the CS Games Operating Systems competition.

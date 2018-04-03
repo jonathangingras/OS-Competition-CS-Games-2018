@@ -1,0 +1,60 @@
+.Dd February 6, 2018
+
+.Dt KIKI 3
+
+.Os GNU/Linux
+
+.Sh NAME
+.Nm kiki_buffer_inspect
+.Nd access the buffer size and id on the device
+
+.Sh SYNOPSIS
+.Fd #include <kiki_api.h>
+.Ft int
+.Fo kiki_buffer_inspect
+.Fa "kiki_buffer_handle_t *buffer"
+.Fa "struct kiki_buffer_info *info"
+.Fc
+
+.Sh DESCRIPTION
+The
+.Fn kiki_buffer_inspect
+function is in charge of inspecting the device buffer corresponding to the buffer represented in user space by the
+.Fa kiki_buffer_handle_t *buffer
+structure pointer.
+The inspection is represented by the
+.Fa struct kiki_buffer_info
+type in both kernel space and user space.
+The
+.Fa info
+argument should be written as an output parameter.
+
+
+.Sh RETURN VALUES
+In case of success, 0 is returned.
+
+The function should not fail in any circumstance, even if the underlying kernel interface call(s) could.
+
+
+.Va errno
+is
+.Va not
+set accordingly.
+
+
+.Sh ERRORS
+.Fn kiki_buffer_inspect
+should not fail in any circumstance, even if an underlying kernel interface call may.
+
+
+.Sh SEE ALSO
+.Xr kiki_list_buffers 3 ,
+.Xr kiki_buffer_id    3 ,
+.Xr kiki_buffer_size  3
+
+
+.Sh HISTORY
+An
+.Fn kiki_buffer_inspect
+function first appeared in 2018,
+for the CS Games Operating Systems competition.

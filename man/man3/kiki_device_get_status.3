@@ -1,0 +1,77 @@
+.Dd February 6, 2018
+
+.Dt KIKI 3
+
+.Os GNU/Linux
+
+.Sh NAME
+.Nm kiki_device_get_status
+.Nd gets the kiki device status
+
+.Sh SYNOPSIS
+.Fd #include <kiki_api.h>
+.Ft int
+.Fo kiki_device_get_status
+.Fa "kiki_handle_t *dev"
+.Fa "struct kiki_status *out"
+.Fc
+
+.Sh DESCRIPTION
+The
+.Fn kiki_device_get_status
+function gets the status of the kiki device using device handle
+.Fa dev
+previously obtained by a call to
+.Fn kiki_device_init .
+
+The
+.Fa struct kiki_status *out
+argument is written by
+.Fn kiki_device_get_status .
+
+The definition of the structure can be found in the
+.Ao kiki.h Ac
+header, and this very definition is used both in Kernel Space and User Space.
+
+The
+.Fn kiki_device_get_status
+may not be called on an non-already-initialized
+.Fa dev
+argument using
+.Fn kiki_device_init
+\, otherwise, its behaviour is undefined.
+
+
+.Sh RETURN VALUES
+In case of success, a value of 0 is returned.
+
+If an error has occurred, a non-zero value is returned,
+corresponding to the underlying used
+.Fn ioctl
+interface.
+
+.Va errno
+is
+.Va not
+set accordingly.
+
+
+.Sh ERRORS
+.Fn kiki_device_get_status
+has no specific error associated with it.
+Although, it should return any error code returned by
+the underlying
+.Fn ioctl
+call.
+
+
+.Sh SEE ALSO
+.Xr kiki_device_fileno 3 ,
+.Xr kiki_device_init 3
+
+
+.Sh HISTORY
+An
+.Fn kiki_device_get_status
+function first appeared in 2018,
+for the CS Games Operating Systems competition.

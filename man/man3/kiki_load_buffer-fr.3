@@ -1,0 +1,71 @@
+.Dd February 6, 2018
+
+.Dt KIKI 3
+
+.Os GNU/Linux
+
+.Sh NOM
+.Nm kiki_load_buffer
+.Nd lis un buffer d'un fichier et l'insère dans la devise
+
+.Sh SYNOPSIS
+.Fd #include <kiki_api.h>
+.Ft ssize_t
+.Fo kiki_load_buffer
+.Fa "kiki_handle_t *dev"
+.Fa "kiki_buffer_handle_t **out"
+.Fa "FILE *input"
+.Fc
+
+.Sh DESCRIPTION
+La fonction
+.Fn kiki_load_buffer
+est en charge de lire un buffer d'un fichier complètement et insérer son contenu dans un nouveau buffer sur la devise.
+Le format utilisé pour la lecture du fichier n'est pas imposé, mais il doit être cohérent exactement avec celui utilisé par
+.Fn kiki_save_buffer
+pour combiner load et save.
+
+La fonction
+.Fn kiki_load_buffer
+est responsable pour l'allocation et l'initialisation correcte de la structure
+.Fa "kiki_buffer_handle_t"
+nouvellement remplie sur la devise, pointée par son argument de sortie
+.Fa out
+.
+
+.Sh VALEURS DE RETOUR
+En cas de succès, 0 est retourné.
+
+En cas d'erreur d'allocation, -1 est retourné.
+
+Si le paramètre
+.Fa input
+est invalide, une valeur < 0 est retournée.
+
+En aucune autre circonstance la fonction ne devrait échouer, même si des appels vers l'interface noyau sous-jacente pourraient.
+
+
+.Va errno
+.Va n'est pas
+modifié.
+
+
+.Sh ERREURS
+.Fn kiki_load_buffer
+ne devrait échouer que si l'argument
+.Fa input
+n'est pas un FILE* valide ou si l'allocation dynamique échoue.
+
+En aucune autre circonstance la fonction ne devrait échouer, même si des appels vers l'interface noyau sous-jacente pourraient.
+
+
+.Sh VOIR AUSSI
+.Xr kiki_write_buffer 3 ,
+.Xr kiki_save_buffer 3
+
+
+.Sh HISTOIRE
+Une fonction
+.Fn kiki_load_buffer
+ arriva en 2018,
+pour la compétition de Système d'Exploitation des CS Games.

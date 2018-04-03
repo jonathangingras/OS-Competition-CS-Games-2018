@@ -1,0 +1,56 @@
+.Dd February 6, 2018
+
+.Dt KIKI 3
+
+.Os GNU/Linux
+
+.Sh NOM
+.Nm kiki_buffer_size
+.Nd accède à la taille du buffer sur la devise
+
+.Sh SYNOPSIS
+.Fd #include <kiki_api.h>
+.Ft int
+.Fo kiki_buffer_size
+.Fa "kiki_buffer_handle_t *buffer"
+.Fa "size_t *out"
+.Fc
+
+.Sh DESCRIPTION
+La fonction
+.Fn kiki_buffer_size
+est en charge de récupérer la taille, sur la devise, du buffer représenté par la structure
+.Fa kiki_buffer_handle_t *buffer
+en mode utilisateur.
+La taille devrait être écrite en mémoire dans
+.Fa out
+.
+
+
+.Sh VALEURS DE RETOUR
+En cas de succès, 0 est retourné.
+
+La fonction ne devrait échouer en aucune circonstance, même si des appels vers l'interface noyau sous-jacente pourraient.
+
+
+.Va errno
+.Va n'est pas
+modifié.
+
+
+.Sh ERREURS
+.Fn kiki_buffer_size
+La fonction ne devrait échouer en aucune circonstance, même si des appels vers l'interface noyau sous-jacente pourraient.
+
+
+.Sh VOIR AUSSI
+.Xr kiki_list_buffers   3 ,
+.Xr kiki_count_buffers  3 ,
+.Xr kiki_buffer_inspect 3
+
+
+.Sh HISTOIRE
+Une fonction
+.Fn kiki_buffer_size
+ arriva en 2018,
+pour la compétition de Système d'Exploitation des CS Games.

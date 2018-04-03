@@ -1,0 +1,61 @@
+.Dd February 6, 2018
+
+.Dt KIKI 3
+
+.Os GNU/Linux
+
+.Sh NOM
+.Nm kiki_write_buffer
+.Nd écrit un buffer dans la devise
+
+.Sh SYNOPSIS
+.Fd #include <kiki_api.h>
+.Ft ssize_t
+.Fo kiki_write_buffer
+.Fa "kiki_buffer_handle_t *buffer"
+.Fa "const char *data"
+.Fa "size_t length"
+.Fc
+
+.Sh DESCRIPTION
+La fonction
+.Fn kiki_write_buffer
+est en charge de remplir un buffer sur la devise, correspondant à celui représenté en mode utilisateur par la struture pointée par
+.Fa kiki_buffer_handle_t *buffer ,
+avec les données passées en argument
+.Fa data
+de longueur
+.Fa length
+en octets.
+
+
+.Sh VALEURS DE RETOUR
+En cas de succès, le nombre d'octets écrits est retourné.
+
+Si la longueur passée par argument est plus grande que la vrai taille du buffer, une valeur de -2 est retournée.
+
+En aucune autre circonstance la fonction ne devrait échouer, même si des appels vers l'interface noyau sous-jacente pourraient.
+
+
+.Va errno
+.Va n'est pas
+modifié.
+
+
+.Sh ERREURS
+.Fn kiki_write_buffer
+ne devrait échouer que si l'argument
+.Fa length
+passé est trop grand.
+En aucune autre circonstance la fonction ne devrait échouer, même si des appels vers l'interface noyau sous-jacente pourraient.
+
+
+.Sh VOIR AUSSI
+.Xr kiki_read_buffer 3
+
+
+.Sh HISTOIRE
+Une fonction
+.Fn kiki_write_buffer
+ arriva en 2018,
+pour la compétition de Système d'Exploitation des CS Games.
